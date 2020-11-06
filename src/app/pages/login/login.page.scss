@@ -26,7 +26,7 @@ ion-slides {
     .slide-inner {
         width: 75%;
         color: rgb(255, 255, 255);
-        background-color: #09487a;
+        background-color: #7a0909;
         border-radius: 10px;
 
         ion-item {
@@ -46,6 +46,7 @@ ion-slides {
     right: 0;
     bottom: 0;
     height: 100%;
+
     background-image: url('/assets/img/ocean.jpg');
 
     span{
