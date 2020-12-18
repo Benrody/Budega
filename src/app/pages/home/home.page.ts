@@ -4,6 +4,9 @@ import { Product } from 'src/app/interfaces/product';
 import { ProductService } from 'src/app/services/product.service';
 import { AuthService } from 'src/app/services/auth.service';
 import { LoadingController, ToastController, MenuController } from '@ionic/angular';
+//////////////////////////////////////////////
+import _ from 'lodash';
+/////////////////////////////////////////////
 
 @Component({
   selector: 'app-home',
@@ -16,19 +19,48 @@ export class HomePage implements OnInit {
   private loading: any;
   public products = new Array<Product>();
   private productsSubscription: Subscription;
-
+  ///////////////////////////////////////
+  classificados: Array<{nome:string}>
+  allClassificados: any;
+  queryText: string;
+//////////////////////////////////////////
   constructor(
     private authService: AuthService,
     private loadingCtrl: LoadingController,
     private productService: ProductService,
     private toastCtrl: ToastController,
-    private menu: MenuController
+    private menu: MenuController,
   ) {
     this.productsSubscription = this.productService.getProducts().subscribe(data => {
       this.products = data;
     });
+    //searchbar/////////////////////////////////////////////////
+    this.queryText = '';
+    this.classificados = [
+      {nome: 'carro'},
+      {nome: 'moto'},
+      {nome: 'casa'},
+      {nome: 'bicicleta'},
+      {nome: 'celular'},
+    ];
+    this.allClassificados = this.classificados;
   }
 
+  filterClassificados( classif: any){
+    let val = classif.target.value;
+    if(val && val.trim() != ' '){
+      this.classificados = _.values(this.allClassificados);
+      this.classificados = this.classificados.filter((classificados) =>{
+        return(classificados.nome.toLowerCase().indexOf(val.toLowerCase())> -1);
+
+      })
+    }else{
+      this.classificados = this.allClassificados;
+    }
+
+
+  }
+///////////////////////////////////////////////////////////////////////
   ngOnInit() { }
 
   ngOnDestroy() {
