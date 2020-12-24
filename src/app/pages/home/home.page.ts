@@ -31,10 +31,7 @@ export class HomePage implements OnInit {
     private toastCtrl: ToastController,
     private menu: MenuController,
   ) {
-    this.productsSubscription = this.productService.getProducts().subscribe(data => {
-      this.products = data;
-    });
-    //searchbar/////////////////////////////////////////////////
+    this.getProductsList();
     this.queryText = '';
     this.classificados = [
       {nome: 'carro'},
@@ -46,19 +43,20 @@ export class HomePage implements OnInit {
     this.allClassificados = this.classificados;
   }
 
-  filterClassificados( classif: any){
-    let val = classif.target.value;
-    if(val && val.trim() != ' '){
-      this.classificados = _.values(this.allClassificados);
-      this.classificados = this.classificados.filter((classificados) =>{
-        return(classificados.nome.toLowerCase().indexOf(val.toLowerCase())> -1);
+  getProductsList(){
+    this.productsSubscription = this.productService.getProducts().subscribe(data => {
+      this.products = data;
+    });
+  }
 
-      })
-    }else{
-      this.classificados = this.allClassificados;
+  filterClassificados( event: any){
+    this.getProductsList();
+    let textoDaBusca = event.target.value.toLowerCase();
+    if (textoDaBusca && textoDaBusca.trim() != '') {
+      this.products = this.products.filter((item) => {
+        return (item.name.toLowerCase().indexOf(textoDaBusca.toLowerCase()) > -1);
+      });
     }
-
-
   }
 ///////////////////////////////////////////////////////////////////////
   ngOnInit() { }
